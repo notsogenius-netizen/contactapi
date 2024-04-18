@@ -2,6 +2,7 @@ package com.soucha.contactapi.resource;
 
 
 import com.soucha.contactapi.entities.Contact;
+import com.soucha.contactapi.repo.ContactRepo;
 import com.soucha.contactapi.service.ContactService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,8 +23,10 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 @RequestMapping("/contacts")
 @RequiredArgsConstructor
 public class ContactResource {
+
     private final ContactService contactService;
-    
+    private final ContactRepo contactRepo;
+
     @PostMapping
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
         return ResponseEntity.created(URI.create("/contacts/userID")).body(contactService.createContact(contact));
@@ -40,12 +43,18 @@ public class ContactResource {
         return ResponseEntity.ok().body(contactService.getContact(id));
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteContact(@PathVariable(value = "id") String id){
+        if (!contactRepo.existsById(id)){
+            throw new RuntimeException("Contact Not Found!!");
+        }
+        contactService.deleteContact(id);
+    }
+
     @PutMapping("/photo")
     public ResponseEntity<String> uploadPhoto(@RequestParam("id") String id, @RequestParam("file")MultipartFile file) {
         return ResponseEntity.ok().body(contactService.uploadPhoto(id, file));
     }
-
-
 
     @GetMapping(path = "/image/{filename}", produces = { IMAGE_PNG_VALUE, IMAGE_JPEG_VALUE })
     public byte[] getPhoto(@PathVariable("filename") String filename) throws IOException {
