@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+.mvn
+/target/
+.gitignore
+HELP.md
+mvnw
+mvnw.cmd

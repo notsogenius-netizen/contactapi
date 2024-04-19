@@ -2,6 +2,7 @@ package com.soucha.contactapi.service;
 
 import com.soucha.contactapi.entities.Contact;
 import com.soucha.contactapi.repo.ContactRepo;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,9 @@ public class ContactService {
     }
 
     public void deleteContact(String id) {
+        if (!contactRepo.existsById(id)) {
+            throw new EntityNotFoundException("Employee with the id: " + id + " not found");
+        }
         contactRepo.deleteById(id);
     }
 

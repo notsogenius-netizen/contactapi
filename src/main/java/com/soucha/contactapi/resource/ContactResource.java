@@ -4,8 +4,10 @@ package com.soucha.contactapi.resource;
 import com.soucha.contactapi.entities.Contact;
 import com.soucha.contactapi.repo.ContactRepo;
 import com.soucha.contactapi.service.ContactService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,11 +46,13 @@ public class ContactResource {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteContact(@PathVariable(value = "id") String id){
-        if (!contactRepo.existsById(id)){
-            throw new RuntimeException("Contact Not Found!!");
+    public ResponseEntity<?> deleteContact(@PathVariable(value = "id") String id){
+        try {
+            contactService.deleteContact(id);
+            return new ResponseEntity<>("Employee with the id: " + id + " deleted successfully", HttpStatus.OK);
+        }catch (EntityNotFoundException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        contactService.deleteContact(id);
     }
 
     @PutMapping("/photo")
