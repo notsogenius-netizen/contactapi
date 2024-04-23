@@ -27,7 +27,6 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 public class ContactResource {
 
     private final ContactService contactService;
-    private final ContactRepo contactRepo;
 
     @PostMapping
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
@@ -36,7 +35,7 @@ public class ContactResource {
 
     @GetMapping
     public ResponseEntity<Page<Contact>> getContacts(@RequestParam(value = "page", defaultValue = "0") int page,
-                                                     @RequestParam(value = "size", defaultValue = "10") int size) {
+                                                     @RequestParam(value = "size", defaultValue = "8") int size) {
         return ResponseEntity.ok().body(contactService.getAllContacts(page, size));
     }
 

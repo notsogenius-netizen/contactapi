@@ -5,7 +5,6 @@ import com.soucha.contactapi.repo.ContactRepo;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -24,7 +23,6 @@ import static com.soucha.contactapi.constant.Constant.PHOTO_DIRECTORY;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
-@Slf4j
 @Transactional(rollbackOn = Exception.class)
 @RequiredArgsConstructor
 public class ContactService {
@@ -50,7 +48,6 @@ public class ContactService {
     }
 
     public String uploadPhoto(String id, MultipartFile file) {
-        log.info("Saving picture for user ID: {}", id);
         Contact contact = getContact(id);
         String photoUrl = photoFunction.apply(id, file);
         contact.setPhotoUrl(photoUrl);

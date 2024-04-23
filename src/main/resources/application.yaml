@@ -25,7 +25,3 @@ spring:
       request-timeout: 3600000
 server:
   port: 8080
-  error:
-    path: /user/error
-    whitelabel:
-      enabled: false
